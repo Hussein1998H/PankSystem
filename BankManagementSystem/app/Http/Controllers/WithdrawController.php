@@ -15,6 +15,14 @@ class WithdrawController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct()
+    {
+        $this->middleware('isCustomer')->only('mywithdraw');
+//        $this->middleware('isUser');
+
+    }
+
     public function index()
     {
         if (!auth()->user()->tokenCan('admin')){
@@ -43,6 +51,13 @@ class WithdrawController extends Controller
     public function store(Request $request)
     {
         try {
+            if (!auth()->user()->tokenCan('user') && !auth()->user()->tokenCan('admin')){
+
+                return response()->json([
+                    'message'=>'you Dont Have permission'
+                ],400);
+            }
+
             DB::beginTransaction();
 
             $user=Auth::user();
@@ -142,6 +157,12 @@ class WithdrawController extends Controller
     }
 
     public function withdrawHistory(Request $request){  //للاستفسار عن طريق الموظف
+        if (!auth()->user()->tokenCan('user') && !auth()->user()->tokenCan('admin')){
+
+            return response()->json([
+                'message'=>'you Dont Have permission'
+            ],400);
+        }
         $account=Account::where('accountNumber',$request->accountNumber)->first();
 
         $withdraw=Withdraw::where('account_id',$account->id)->get();
@@ -154,7 +175,14 @@ class WithdrawController extends Controller
 
         $user=Auth::user();
         $account=$user->accounts;
-        $withdraw=Withdraw::whereIn('account_id',$account->pluck('id'))->get();
+        $withds=Account::with('withdraws')->where('customer_id',$user->id)->get();
+        $withdraw="";
+        foreach ($withds as $withd)
+        {
+            $withdraw=$withd->withdraws;
+        }
+//        $withdraw=Withdraw::whereIn('account_id',$account->pluck('id'))->get();
+
         return response()->json([
             'Accounts'=>$account,
             '$withdraw'=>$withdraw,

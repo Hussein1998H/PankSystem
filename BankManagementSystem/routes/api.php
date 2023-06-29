@@ -30,21 +30,24 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/user/createUser',[UserAuthController::class,'createUser'])->middleware(['auth:sanctum','isAdmin']);
-//Route::post('/user/login',[UserAuthController::class,'loginUser']);
-//Route::post('/user/logout',[UserAuthController::class,'logout'])->middleware('auth:sanctum');
 Route::post('/user/profile',[UserAuthController::class,'profile'])->middleware(['auth:sanctum','isUser']);
+
+
 //Route::post('/user/forgetPassword',[UserAuthController::class,'forgetPassword']);
 //Route::post('/user/resetPassword',[UserAuthController::class,'resetPassword']);
+//Route::post('/user/login',[UserAuthController::class,'loginUser']);
+//Route::post('/user/logout',[UserAuthController::class,'logout'])->middleware('auth:sanctum');
 
 
 Route::post('/customer/createCustomer',[CustomerAuthController::class,'createcustomer'])->middleware(['isUser','auth:sanctum']);
-//Route::post('/customer/login',[CustomerAuthController::class,'customerlogin']);
-//Route::post('/customer/logout',[CustomerAuthController::class,'customerlogout'])->middleware('auth:sanctum');
 Route::post('/customer/profile',[CustomerAuthController::class,'customerprofile'])->middleware('auth:sanctum');
-//Route::post('/customer/forgetPassword',[CustomerAuthController::class,'forgetPassword']);
-//Route::post('/customer/resetPassword',[CustomerAuthController::class,'resetPassword']);
 Route::resource('customers',CustomerController::class)->middleware('auth:sanctum');
 
+
+//Route::post('/customer/login',[CustomerAuthController::class,'customerlogin']);
+//Route::post('/customer/logout',[CustomerAuthController::class,'customerlogout'])->middleware('auth:sanctum');
+//Route::post('/customer/forgetPassword',[CustomerAuthController::class,'forgetPassword']);
+//Route::post('/customer/resetPassword',[CustomerAuthController::class,'resetPassword']);
 //Route::post('/customer/update/{id}',[CustomerAuthController::class,'update'])->middleware('auth:sanctum');
 
 

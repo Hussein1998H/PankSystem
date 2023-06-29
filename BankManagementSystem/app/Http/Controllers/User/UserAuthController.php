@@ -22,6 +22,13 @@ class UserAuthController extends Controller
 //    }
 
     use HTTP_ResponseTrait;
+    public function __construct()
+    {
+        $this->middleware('isUser');
+        $this->middleware('isAdmin')->only('createUser');
+
+    }
+
     public function createUser(Request $request)
     {
         try {

@@ -16,6 +16,12 @@ class DepositController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+
+        $this->middleware('isCustomer')->only('mydeposit');
+    }
+
     public function index()
     {
         if (!auth()->user()->tokenCan('admin')){
@@ -43,7 +49,15 @@ class DepositController extends Controller
      */
     public function store(Request $request)
     {
+
         try {
+            if (!auth()->user()->tokenCan('user') && !auth()->user()->tokenCan('admin')){
+
+                return response()->json([
+                    'message'=>'you Dont Have permission'
+                ],400);
+            }
+
             DB::beginTransaction();
 
             $user=Auth::user();
@@ -148,6 +162,12 @@ class DepositController extends Controller
         //
     }
     public function depositHistory(Request $request){  //للاستفسار عن طريق الموظف
+        if (!auth()->user()->tokenCan('user') && !auth()->user()->tokenCan('admin')){
+
+            return response()->json([
+                'message'=>'you Dont Have permission'
+            ],400);
+        }
         $account=Account::where('accountNumber',$request->accountNumber)->first();
 
         $deposit=Deposit::where('account_id',$account->id)->get();
@@ -160,10 +180,17 @@ class DepositController extends Controller
 
         $user=Auth::user();
         $account=$user->accounts;
-        $deposit=Deposit::whereIn('account_id',$account->pluck('id'))->get();
+        $deps=Account::with('deposits')->where('customer_id',$user->id)->get();
+        $Deposit="";
+        foreach ($deps as $dep)
+        {
+            $Deposit=$dep->deposits;
+        }
+//       $deposit=Deposit::whereIn('account_id',$account->pluck('id'))->get();
+
         return response()->json([
             'Accounts'=>$account,
-            'withdraw'=>$deposit,
+            'Deposit'=>$Deposit,
         ],200);
     }
 }
