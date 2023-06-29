@@ -76,6 +76,9 @@ Route::post('accounts/blockAccount',[AccountController::class,'blockAccount'])->
 Route::resource('branches',BranchController::class)->middleware('auth:sanctum');
 
 
+//Route::controller(AuthController::class)->group(function (){
+//
+//});
 
 Route::post('login',[AuthController::class,'login']);
 Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
