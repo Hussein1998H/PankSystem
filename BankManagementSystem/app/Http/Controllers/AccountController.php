@@ -6,6 +6,7 @@ use App\Models\Acc_money;
 use App\Models\Account;
 use App\Models\Branch;
 use App\Models\Customer;
+use App\Models\mony;
 use App\Traits\HTTP_ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -58,11 +59,11 @@ class AccountController extends Controller
             $customer=Customer::where('ID_number',$request->ID_number)->first();
             $branch=Branch::where('address',$request->address)->first();
             $ifexiest=Account::where('customer_id',$customer->id)->first();
-            if ($ifexiest){
-                return response()->json([
-                   'error'=>'this customer is already have account'
-                ],400);
-            }
+//            if ($ifexiest){
+//                return response()->json([
+//                   'error'=>'this customer is already have account'
+//                ],400);
+//            }
             $account=Account::create([
                 'customer_id'=>$customer->id,
                 'branch_id'=>$branch->id,
@@ -72,19 +73,81 @@ class AccountController extends Controller
                 'type'=>$request->AccountType,
             ]);
 
-            Acc_money::create([
-                    'acc_id'=>$account->id,
-                    'money_id'=>1,
-            ]);
+            $usd=mony::where('type','USD')->first();
+            $tr=mony::where('type','TR')->first();
+            $eur=mony::where('type','EUR')->first();
 
-            Acc_money::create([
-                'acc_id'=>$account->id,
-                'money_id'=>2,
-            ]);
-            Acc_money::create([
-                'acc_id'=>$account->id,
-                'money_id'=>3,
-            ]);
+            if ($request->type_mony=='USD'){
+                Acc_money::create([
+                    'acc_id'=>$account->id,
+                    'money_id'=>$usd->id,
+                    'balance'=>$request->balance,
+                ]);
+
+                Acc_money::create([
+                    'acc_id'=>$account->id,
+                    'money_id'=>$tr->id,
+                ]);
+                Acc_money::create([
+                    'acc_id'=>$account->id,
+                    'money_id'=>$eur->id,
+                ]);
+
+            }
+            elseif($request->type_mony=='TR'){
+                Acc_money::create([
+                    'acc_id'=>$account->id,
+                    'money_id'=>$tr->id,
+                    'balance'=>$request->balance,
+                ]);
+
+                Acc_money::create([
+                    'acc_id'=>$account->id,
+                    'money_id'=>$usd->id,
+
+                ]);
+
+
+                Acc_money::create([
+                    'acc_id'=>$account->id,
+                    'money_id'=>$eur->id,
+                ]);
+
+            }
+
+            elseif($request->type_mony=='EUR'){
+                Acc_money::create([
+                    'acc_id'=>$account->id,
+                    'money_id'=>$usd->id,
+
+                ]);
+
+                Acc_money::create([
+                    'acc_id'=>$account->id,
+                    'money_id'=>$tr->id,
+
+                ]);
+                Acc_money::create([
+                    'acc_id'=>$account->id,
+                    'money_id'=>$eur->id,
+                    'balance'=>$request->balance,
+                ]);
+
+            }
+
+//            Acc_money::create([
+//                    'acc_id'=>$account->id,
+//                    'money_id'=>1,
+//            ]);
+//
+//            Acc_money::create([
+//                'acc_id'=>$account->id,
+//                'money_id'=>2,
+//            ]);
+//            Acc_money::create([
+//                'acc_id'=>$account->id,
+//                'money_id'=>3,
+//            ]);
 
             return $this->returndata(true,$account,200);
         }
@@ -154,6 +217,19 @@ class AccountController extends Controller
            'status'=>true,
            'message'=>'this Account Was Blocked',
            'data'=>$account
+        ],200);
+    }
+
+    public function unblockAccount(Request $request){
+
+        $account=Account::where('accountNumber',$request->accountNumber)->first();
+        $account->update([
+            'isActive'=>true,
+        ]);
+        return response()->json([
+            'status'=>true,
+            'message'=>'this Account Was Blocked',
+            'data'=>$account
         ],200);
     }
 }

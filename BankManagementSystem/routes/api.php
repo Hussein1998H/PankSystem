@@ -29,6 +29,10 @@ use Illuminate\Support\Facades\Route;
 //});
 
 
+
+
+//Route::middleware("auth:sanctum")->group(function () {});
+
 Route::post('/user/createUser',[UserAuthController::class,'createUser'])->middleware(['auth:sanctum','isAdmin']);
 Route::post('/user/profile',[UserAuthController::class,'profile'])->middleware(['auth:sanctum','isUser']);
 
@@ -75,6 +79,7 @@ Route::get('mydeposit',[DepositController::class,'mydeposit'])->middleware('auth
 Route::resource('accounts',AccountController::class)->middleware('auth:sanctum');
 Route::get('showmyaccunt/{id}',[AccountController::class,'showaccunt'])->middleware('auth:sanctum');
 Route::post('accounts/blockAccount',[AccountController::class,'blockAccount'])->middleware('auth:sanctum');
+Route::post('accounts/unblockAccount',[AccountController::class,'unblockAccount'])->middleware('auth:sanctum');
 
 Route::resource('branches',BranchController::class)->middleware('auth:sanctum');
 
@@ -87,3 +92,4 @@ Route::post('login',[AuthController::class,'login']);
 Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
 Route::post('forgetPassword',[AuthController::class,'forgetPassword']);
 Route::post('resetPassword',[AuthController::class,'resetPassword']);
+

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\mony;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
     return view('welcome');
+});
+
+Route::get('test',function (){
+    $usd=mony::where('type','USD')->first();
+return $usd->id;
 });
