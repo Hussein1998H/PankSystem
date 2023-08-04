@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2d22bd68e20eecbf72000bf8ac205d9",
+    "content-hash": "544bb6d2aecd56bdc630b59934243700",
     "packages": [
         {
             "name": "brick/math",
@@ -432,6 +432,70 @@
                 }
             ],
             "time": "2023-01-14T14:17:03+00:00"
+        },
+        {
+            "name": "everapi/currencyapi-php",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/everapihq/currencyapi-php.git",
+                "reference": "96eb977746734469a1b3d84e54873c5fffeb34e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/everapihq/currencyapi-php/zipball/96eb977746734469a1b3d84e54873c5fffeb34e0",
+                "reference": "96eb977746734469a1b3d84e54873c5fffeb34e0",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.4",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "pestphp/pest": "^1.20",
+                "spatie/ray": "^1.28"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CurrencyApi\\CurrencyApi\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Clemens Ehrenreich",
+                    "email": "clemens@everapi.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Lukas Struber",
+                    "email": "lukas.struber@everapi.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP wrapper for the currencyapi.com API",
+            "homepage": "https://github.com/everapihq/currencyapi-php",
+            "keywords": [
+                "api",
+                "currency",
+                "currency conversion",
+                "currency converter",
+                "currency data",
+                "currencyapi",
+                "currencyapi-php",
+                "currencyapi.com",
+                "exchange rates"
+            ],
+            "support": {
+                "issues": "https://github.com/everapihq/currencyapi-php/issues",
+                "source": "https://github.com/everapihq/currencyapi-php/tree/v1.0.0"
+            },
+            "time": "2022-05-06T09:56:31+00:00"
         },
         {
             "name": "fruitcake/php-cors",

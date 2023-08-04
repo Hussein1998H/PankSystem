@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\Customers\CustomerAuthController;
 use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\DepositController;
@@ -93,3 +94,5 @@ Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum
 Route::post('forgetPassword',[AuthController::class,'forgetPassword']);
 Route::post('resetPassword',[AuthController::class,'resetPassword']);
 
+Route::get('AllCurrency',[CurrencyController::class,'index']);
+Route::post('ConvertMony',[CurrencyController::class,'convertMony']);
