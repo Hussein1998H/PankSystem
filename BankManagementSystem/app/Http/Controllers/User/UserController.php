@@ -40,8 +40,24 @@ class UserController extends Controller
 //        $image=$request->file('photo')->getClientOriginalName();
 //        $imageName=$request->file('photo')->storeAs('user',$image,'images');
 
+        $validator = Validator::make($request->all(),
+            [
+                'firstName' => 'required',
+                'lastName' => 'required',
+                'ID_number'=>'required|digits_between:8,20',
+                'address' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'phone' => 'required|digits_between:8,15',
+                'password' => 'required|min:8',
+                'role'=>'required',
+            ]);
+        if ($validator->fails()) {
+            return $this->errorResponse(false, 'validation error', $validator->errors(), 401);
+
+        }
         $branch= Branch::where('address',$request->branchaddress)->first();
         $user=User::find($id);
+
         $user->update([
             'branch_id'=>$branch->id,
             'firstName'=>$request->firstName,

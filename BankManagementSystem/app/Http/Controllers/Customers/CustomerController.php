@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Traits\HTTP_ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Testing\Fluent\Concerns\Has;
 
 class CustomerController extends Controller
@@ -70,16 +71,30 @@ class CustomerController extends Controller
 //        $image=$request->file('photo')->getClientOriginalName();
 //
 //        $imageName=$request->file('photo')->storeAs('customer',$image,'images');
+        $validator = Validator::make($request->all(),
+            [
+                'firstName' => 'required|sometimes',
+                'lastName' => 'required|sometimes',
+                'ID_number'=>'required|digits_between:8,20|sometimes',
+                'address' => 'required|sometimes',
+                'email' => 'required|email|unique:users,email|sometimes',
+                'phone' => 'required|digits_between:8,15|sometimes',
+                'password' => 'required|min:8|sometimes',
+            ]);
+        if ($validator->fails()) {
+            return $this->errorResponse(false, 'validation error', $validator->errors(), 401);
+
+        }
         $customer->update([
-            'firstName' => $request->firstName,
-            'lastName' => $request->lastName,
-            'ID_number'=>$request->ID_number,
-            'gender' => $request->gender,
+            'firstName' => $request->input('firstName'),
+            'lastName' => $request->input('lastName'),
+            'ID_number'=>$request->input('ID_number'),
+            'gender' => $request->input('gender'),
 //            'image'=>$imageName,
-            'address' => $request->address,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => Hash::make($request->password)
+            'address' => $request->input('address'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'password' => Hash::make($request->input('password'))
         ]);
         return $this->returndata(true,$customer,200);
     }

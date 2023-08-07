@@ -7,6 +7,7 @@ use App\Models\Account;
 use App\Models\Customer;
 use App\Models\mony;
 use App\Models\Transaction;
+use CurrencyApi\CurrencyApi\CurrencyApiClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -46,73 +47,104 @@ class TransactionController extends Controller
     public function dotransaction(Request $request){
 
 
+
         try {
-            DB::beginTransaction();
-            $type=$request->typemony;
-            $accountfrom=Account::with('accmonies')->where('accountNumber',$request->accountNumberFrom)->first();
-            $mony=mony::where('type',$type)->first();
-            $personbalancefrom=Acc_money::where('acc_id',$accountfrom->id)->where('money_id',$mony->id)->first();
+
+
+
+
+
+            $typeTo=mony::where('type',$request->typeto)->first();
 
             $accountto=Account::with('accmonies')->where('accountNumber',$request->accountNumberTo)->first();
-            $personbalanceto=Acc_money::where('acc_id',$accountto->id)->where('money_id',$mony->id)->first();
+//            $personbalanceto=Acc_money::where('acc_id',$accountto->id)->where('money_id',$mony->id)->first();
 
-            $amount=$request->amount;
-
-
-            if ($personbalancefrom->balance < $amount){
-
-                return response()->json([
-                    'Error'=>'Your Account balance less Than That',
-
-                ],400);
-            }
-            if (!$accountfrom->isActive)
-            {
-                return response()->json([
-                    'Error'=>'Your Account  Is Blocked',
+            $personbalanceto=Acc_money::where('acc_id',$accountto->id)->where('money_id',$typeTo->id)->first();
 
 
-                ],400);
-            }
-
-            if ( !$accountto->isActive)
-            {
-                return response()->json([
-                    'Error'=>'The Account you will To  send Money Is Blocked',
-
-                ],400);
+            if (!$personbalanceto){
+                Acc_money::create([
+                    'acc_id'=>$accountto->id,
+                    'money_id'=>$typeTo->id,
+                ]);
+               return response()->json([
+                   'Erorr'=>'The Person That  You Well Translate Mony Dont Have Account With This Type Of Mony  we Well Open To Him  Please Try Agin After A few mintets ',
+               ]);
 
             }
+            else {
+                DB::beginTransaction();
+                $type = $request->typemony;
+                $accountfrom = Account::with('accmonies')->where('accountNumber', $request->accountNumberFrom)->first();
+                $mony = mony::where('type', $type)->first();
 
-            $personbalancefrom->balance -=$amount;
-            $personbalanceto->balance+=$amount;
-
-            $personbalancefrom->save();
-            $personbalanceto->save();
-
-            $transaction=Transaction::create([
-                'account_id'=>$accountfrom->id,
-                'account_from_id'=>$accountfrom->accountNumber,
-                'account_to_id'=>$accountto->accountNumber,
-                'trans_date'=>now(),
-                'balance'=>$amount,
-                'type'=>$type,
-                'description'=>$request->description,
-            ]);
-
-            DB::commit();
+                $personbalancefrom = Acc_money::where('acc_id', $accountfrom->id)->where('money_id', $mony->id)->first();
+                $amount = $request->amount;
 
 
-            return response()->json([
+                if ($personbalancefrom->balance < $amount) {
+
+                    return response()->json([
+                        'Error' => 'Your Account balance less Than That',
+
+                    ], 400);
+                }
+                if (!$accountfrom->isActive) {
+                    return response()->json([
+                        'Error' => 'Your Account  Is Blocked',
+
+
+                    ], 400);
+                }
+
+                if (!$accountto->isActive) {
+                    return response()->json([
+                        'Error' => 'The Account you will To  send Money Is Blocked',
+
+                    ], 400);
+
+                }
+
+                $personbalancefrom->balance -= $amount;
+
+
+                $currencyapi = new CurrencyApiClient('cur_live_sX0cEf48NHZKCCrqdeZPz2I2bXjePFCoR5DlrpEf');
+
+                $test = $fromdata = $currencyapi->latest([
+                    'base_currency' => $request->typemony,
+                    'currencies' => $request->typeto
+                ]);
+                $forone = $test['data'][$request->typeto]['value'];
+                $finaldata = $amount * $forone;
+
+                $personbalanceto->balance += $finaldata;
+
+                $personbalancefrom->save();
+                $personbalanceto->save();
+
+                $transaction = Transaction::create([
+                    'account_id' => $accountfrom->id,
+                    'account_from_id' => $accountfrom->accountNumber,
+                    'account_to_id' => $accountto->accountNumber,
+                    'trans_date' => now(),
+                    'balance' => $amount,
+                    'type' => $type,
+                    'description' => $request->description,
+                ]);
+
+                DB::commit();
+
+
+                return response()->json([
 //                'dataAccountfrom'=>$accountFrom,
 //                'accountNumberFrom'=>$accountNumberFrom,
 //                'balanceFrom'=>$balanceFrom,
 //                'dataAccountTo'=>$accountTo,
 //                'accountNumberTo'=>$accountNumberTo,
 //                'balanceTo'=>$balanceTo,
-                'data'=>$transaction,
-            ],200);
-
+                    'data' => $transaction,
+                ], 200);
+            }
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json([

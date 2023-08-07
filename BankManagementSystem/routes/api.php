@@ -59,7 +59,7 @@ Route::resource('customers',CustomerController::class)->middleware('auth:sanctum
 
 Route::get('user/index',[UserController::class,'index']);
 Route::get('user/edit/{id}',[UserController::class,'edit']);
-Route::put('user/update/{id}',[UserController::class,'update']);
+Route::patch('user/update/{id}',[UserController::class,'update']);
 Route::delete('user/destroy/{id}',[UserController::class,'destroy']);
 
 
@@ -96,3 +96,4 @@ Route::post('resetPassword',[AuthController::class,'resetPassword']);
 
 Route::get('AllCurrency',[CurrencyController::class,'index']);
 Route::post('ConvertMony',[CurrencyController::class,'convertMony']);
+
