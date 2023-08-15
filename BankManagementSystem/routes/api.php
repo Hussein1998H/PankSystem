@@ -45,6 +45,7 @@ Route::post('/user/profile',[UserAuthController::class,'profile'])->middleware([
 
 
 Route::post('/customer/createCustomer',[CustomerAuthController::class,'createcustomer'])->middleware(['isUser','auth:sanctum']);
+//
 Route::post('/customer/profile',[CustomerAuthController::class,'customerprofile'])->middleware('auth:sanctum');
 Route::resource('customers',CustomerController::class)->middleware('auth:sanctum');
 
@@ -66,7 +67,7 @@ Route::delete('user/destroy/{id}',[UserController::class,'destroy']);
 Route::resource('transactions',TransactionController::class)->middleware('auth:sanctum');
 Route::get('myTramsaction',[TransactionController::class,'myTransaction'])->middleware('auth:sanctum');
 Route::post('dotransaction',[TransactionController::class,'dotransaction'])->middleware('auth:sanctum');
-
+//->middleware('auth:sanctum')
 Route::resource('withdraw',WithdrawController::class)->middleware('auth:sanctum');
 Route::post('withdrawHistory',[WithdrawController::class,'withdrawHistory'])->middleware('auth:sanctum');
 Route::get('mywithdraw',[WithdrawController::class,'mywithdraw'])->middleware('auth:sanctum');
@@ -97,3 +98,4 @@ Route::post('resetPassword',[AuthController::class,'resetPassword']);
 Route::get('AllCurrency',[CurrencyController::class,'index']);
 Route::post('ConvertMony',[CurrencyController::class,'convertMony']);
 
+Route::get('TransactionReport',[\App\Http\Controllers\TransactioReportController::class,'index'])->middleware('auth:sanctum');

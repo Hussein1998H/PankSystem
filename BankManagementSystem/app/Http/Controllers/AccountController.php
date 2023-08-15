@@ -74,7 +74,7 @@ class AccountController extends Controller
             ]);
 
             $usd=mony::where('type','USD')->first();
-            $tr=mony::where('type','TR')->first();
+            $tr=mony::where('type','TRY')->first();
             $eur=mony::where('type','EUR')->first();
 
             if ($request->type_mony=='USD'){
@@ -94,7 +94,7 @@ class AccountController extends Controller
                 ]);
 
             }
-            elseif($request->type_mony=='TR'){
+            elseif($request->type_mony=='TRY'){
                 Acc_money::create([
                     'acc_id'=>$account->id,
                     'money_id'=>$tr->id,

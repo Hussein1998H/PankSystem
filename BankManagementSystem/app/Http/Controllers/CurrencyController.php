@@ -10,13 +10,14 @@ class CurrencyController extends Controller
     public function index(){
 
 
-        $currencyapi = new CurrencyApiClient('cur_live_sX0cEf48NHZKCCrqdeZPz2I2bXjePFCoR5DlrpEf');
+        $currencyapi = new CurrencyApiClient('cur_live_G8rj9dFObmcdf6rElJ9gtIzVjIDLSxbAnki5p03h');
         return response()->json($currencyapi->latest());
+//        currencies
     }
 
     public function convertMony(Request $request){
 
-        $currencyapi = new CurrencyApiClient('cur_live_sX0cEf48NHZKCCrqdeZPz2I2bXjePFCoR5DlrpEf');
+        $currencyapi = new CurrencyApiClient('cur_live_G8rj9dFObmcdf6rElJ9gtIzVjIDLSxbAnki5p03h');
 
         $value=$request->value;
 

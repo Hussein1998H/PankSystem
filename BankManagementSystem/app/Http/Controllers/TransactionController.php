@@ -7,6 +7,7 @@ use App\Models\Account;
 use App\Models\Customer;
 use App\Models\mony;
 use App\Models\Transaction;
+use App\Models\TransactioReport;
 use CurrencyApi\CurrencyApi\CurrencyApiClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,17 +21,49 @@ class TransactionController extends Controller
     public function index()
     {
 
-        if (!auth()->user()->tokenCan('admin')){
 
-            return response()->json([
-                'message'=>'you Dont Have permission'
-            ],400);
-        }
-        $transacton=Transaction::get();
+//        if (!auth()->user()->tokenCan('admin')){
+//
+//            return response()->json([
+//                'message'=>'you Dont Have permission'
+//            ],400);
+//        }
+//        $transacton=Transaction::with('account')->get();
+
+
+//        $customers = Customer::with('accounts.transachs')->get();
+        $customers = Customer::with('accounts.transachs')->get();
 
         return response()->json([
-            'data'=>$transacton,
+            'data'=>$customers,
+
         ],200);
+
+
+
+//        foreach ($customers as $customer) {
+//         $customerFrom= $customer->firstName . " ". $customer->lastName;
+//
+//
+//            foreach ($customer->accounts as $account) {
+//                foreach ($account->transachs as $transaction) {
+//                    $accountNumber=$transaction->account_from_id;
+//                    $accountNumberto=$transaction->account_to_id;
+//
+//                    $senderAccount = Account::find($transaction->account_to_id);
+//                    if ($senderAccount) {
+//                        $senderCustomer = $senderAccount->customer;
+//                        $senderCustomer=$senderCustomer->firstName." ".$senderCustomer->lastName;
+//                    }
+//                }
+//            }
+//        }
+
+
+
+
+//
+
     }
 
     /**
@@ -50,13 +83,11 @@ class TransactionController extends Controller
 
         try {
 
-
-
-
-
             $typeTo=mony::where('type',$request->typeto)->first();
 
             $accountto=Account::with('accmonies')->where('accountNumber',$request->accountNumberTo)->first();
+            $customerTo=Customer::find($accountto->customer_id);
+
 //            $personbalanceto=Acc_money::where('acc_id',$accountto->id)->where('money_id',$mony->id)->first();
 
             $personbalanceto=Acc_money::where('acc_id',$accountto->id)->where('money_id',$typeTo->id)->first();
@@ -76,6 +107,7 @@ class TransactionController extends Controller
                 DB::beginTransaction();
                 $type = $request->typemony;
                 $accountfrom = Account::with('accmonies')->where('accountNumber', $request->accountNumberFrom)->first();
+                 $customerFrom=Customer::find($accountfrom->customer_id);
                 $mony = mony::where('type', $type)->first();
 
                 $personbalancefrom = Acc_money::where('acc_id', $accountfrom->id)->where('money_id', $mony->id)->first();
@@ -108,7 +140,7 @@ class TransactionController extends Controller
                 $personbalancefrom->balance -= $amount;
 
 
-                $currencyapi = new CurrencyApiClient('cur_live_sX0cEf48NHZKCCrqdeZPz2I2bXjePFCoR5DlrpEf');
+                $currencyapi = new CurrencyApiClient('cur_live_G8rj9dFObmcdf6rElJ9gtIzVjIDLSxbAnki5p03h');
 
                 $test = $fromdata = $currencyapi->latest([
                     'base_currency' => $request->typemony,
@@ -130,6 +162,15 @@ class TransactionController extends Controller
                     'balance' => $amount,
                     'type' => $type,
                     'description' => $request->description,
+                ]);
+                TransactioReport::create([
+                    'FromCustomer'=>$customerFrom->firstName." ".$customerFrom->lastName,
+                    'ToCustomer'=>$customerTo->firstName." ".$customerTo->lastName,
+                    'AccountNumberFrom'=> $accountfrom->accountNumber,
+                    'AccountNumberTo'=>$accountto->accountNumber,
+                    'trans_date' => now(),
+                    'balance'=> $amount,
+                    'description'=> $request->description,
                 ]);
 
                 DB::commit();
