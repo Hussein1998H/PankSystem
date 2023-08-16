@@ -331,11 +331,13 @@ class TransactionController extends Controller
 
         $user=Auth::user();
         $account=$user->accounts;
-        $transaction=Transaction::whereIn('account_id',$account->pluck('id'))->get();
+//        $transaction=Transaction::whereIn('account_id',$account->pluck('id'))->get();
+        $transactionR=TransactioReport::whereIn('AccountNumberFrom',$account->pluck('accountNumber'))->get();
 
         return response()->json([
-            'Accounts'=>$account,
-            'Transaction'=>$transaction,
+//            'Accounts'=>$account,
+//            'Transaction'=>$transaction,
+           'data'=>$transactionR
         ],200);
     }
 }
