@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\Branch;
+use App\Models\Customer;
 use App\Models\TransactioReport;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TransactioReportController extends Controller
@@ -13,6 +17,22 @@ class TransactioReportController extends Controller
 
         return response()->json([
            'data'=>$report
+        ]);
+    }
+
+    public  function reportCount(){
+
+        $customer=Customer::count();
+        $branch=Branch::count();
+        $account=Account::count();
+        $employee=User::count();
+
+
+        return response()->json([
+            'CustomerCount'=>$customer,
+            'BranchCount'=>$branch,
+            'AccountsCount'=>$account,
+            'EmployeeCount'=>$employee,
         ]);
     }
 }

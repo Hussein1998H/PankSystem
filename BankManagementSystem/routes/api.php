@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Route;
 //Route::middleware("auth:sanctum")->group(function () {});
 
 Route::post('/user/createUser',[UserAuthController::class,'createUser'])->middleware(['auth:sanctum','isAdmin']);
+//->middleware(['auth:sanctum','isAdmin'])
 Route::post('/user/profile',[UserAuthController::class,'profile'])->middleware(['auth:sanctum','isUser']);
 
 
@@ -98,4 +99,5 @@ Route::post('resetPassword',[AuthController::class,'resetPassword']);
 Route::get('AllCurrency',[CurrencyController::class,'index']);
 Route::post('ConvertMony',[CurrencyController::class,'convertMony']);
 
-Route::get('TransactionReport',[\App\Http\Controllers\TransactioReportController::class,'index'])->middleware('auth:sanctum');
+Route::get('TransactionReport',[\App\Http\Controllers\TransactioReportController::class,'index'])->middleware(['auth:sanctum','isUser']);
+Route::get('reportCount',[\App\Http\Controllers\TransactioReportController::class,'reportCount']);

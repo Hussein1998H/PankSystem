@@ -12,8 +12,11 @@ class CurrencyController extends Controller
 
         $currencyapi = new CurrencyApiClient('cur_live_G8rj9dFObmcdf6rElJ9gtIzVjIDLSxbAnki5p03h');
         return response()->json($currencyapi->latest());
-//        currencies
+//        currencies   latest
     }
+
+
+
 
     public function convertMony(Request $request){
 

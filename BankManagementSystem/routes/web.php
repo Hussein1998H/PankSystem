@@ -23,3 +23,7 @@ Route::get('test',function (){
     $usd=mony::where('type','USD')->first();
 return $usd->id;
 });
+
+Route::get('testEmail',function (){
+   \Illuminate\Support\Facades\Mail::to('kaheralahzan89@gmail.com')->send(new \App\Mail\SendEmailFrom());
+});
