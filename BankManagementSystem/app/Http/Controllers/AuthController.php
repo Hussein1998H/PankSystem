@@ -55,10 +55,18 @@ class AuthController extends Controller
         }
     }
     public function logout(){
-        \auth()->user()->tokens()->delete();
+//        tokens
+        \auth()->user()->currentAccessToken()->delete();
         return response()->json([
             'message'=>'Your logout success'
         ],200);
+    }
+    public  function refreshToken(Request $request){
+        $user=$request->user();
+        $user->tokens()->delete();
+        $token=$user->createToken('API_Token_For' . $user->firstName,[$user->role])->plainTextToken;
+        return $this->successResponse(true, 'Customer Logged In Successfully', $user, $token, 200);
+
     }
     public function forgetPassword(Request $request){
         $validateUser = Validator::make($request->all(),

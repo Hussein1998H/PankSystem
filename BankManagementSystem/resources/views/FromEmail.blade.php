@@ -1,4 +1,8 @@
 <div>
-
-    Hello
+{{--    {{$customerFrom}}--}}
+{{--    {{$customerTo}}--}}
+{{--    {{$accountfrom}}--}}
+{{--    {{$accountto}}--}}
+{{--    {{$amount}}--}}
+{{--    {{$date}}--}}
 </div>

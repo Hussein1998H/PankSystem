@@ -1,0 +1,35 @@
+.fa-arrows-rotate{
+    color: #fff;
+    text-align: center;
+}
+.currency-icn{
+    background-color: #f00;
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-currency{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+.form-currency input{
+    height: 50px;
+    box-shadow: 1px 1px 1px 1px #f00;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-size: 18px;
+}
+/* ::placeholder{
+    text-align: center;
+} */

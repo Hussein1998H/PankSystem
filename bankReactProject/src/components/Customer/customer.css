@@ -1,0 +1,28 @@
+.containerc{
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    transform: translate(-40%,-40%);
+    -webkit-transform: translate(-40%,-40%);
+    -moz-transform: translate(-40%,-40%);
+    -ms-transform: translate(-40%,-40%);
+    -o-transform: translate(-40%,-40%);
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 100px;
+    border: solid 1px #f00;
+    padding: 40px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+.flex{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}

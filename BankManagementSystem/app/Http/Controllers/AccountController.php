@@ -17,7 +17,7 @@ class AccountController extends Controller
        use HTTP_ResponseTrait;
     public function __construct()
     {
-        $this->middleware('isUser');
+        $this->middleware('isUser')->except(['showaccunt']);
         //$this->middleware('isAdmin')->only(['store','edit','update','destroy']);
     }
 
@@ -26,7 +26,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $account=Account::with(['customer','branch','transachs','withdraws','deposits'])->get();
+        $account=Account::with(['customer','accmonies','branch','transachs','withdraws','deposits'])->get();
         return $this->returndata(true,$account,200);
     }
 
@@ -166,9 +166,9 @@ class AccountController extends Controller
 //        return $this->returndata(true,$account,200);
     }
 
-    public function showaccunt($id){
-        $account= Account::with(['accmonies','customer','branch','transachs','withdraws','deposits'])
-            ->where('id',$id)->first();
+    public function showaccunt(){
+        $account= Account::with(['accmonies','branch','transachs','withdraws','deposits'])
+            ->whereIn('customer_id',[auth()->id()])->get();
         return $this->returndata(true,$account,200);
     }
     /**

@@ -26,6 +26,11 @@ class BranchController extends Controller
         $branches=Branch::all();
         return $this->returndata(true,$branches,200);
     }
+    public function getBranches()
+    {
+        $branches=Branch::all();
+        return $this->returndata(true,$branches,200);
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -10,6 +10,7 @@ use App\Http\Controllers\DepositController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\UserAuthController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,7 +37,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/user/createUser',[UserAuthController::class,'createUser'])->middleware(['auth:sanctum','isAdmin']);
 //->middleware(['auth:sanctum','isAdmin'])
-Route::post('/user/profile',[UserAuthController::class,'profile'])->middleware(['auth:sanctum','isUser']);
+Route::get('/user/profile',[UserAuthController::class,'profile'])->middleware(['auth:sanctum','isUser']);
 
 
 //Route::post('/user/forgetPassword',[UserAuthController::class,'forgetPassword']);
@@ -47,7 +48,7 @@ Route::post('/user/profile',[UserAuthController::class,'profile'])->middleware([
 
 Route::post('/customer/createCustomer',[CustomerAuthController::class,'createcustomer'])->middleware(['isUser','auth:sanctum']);
 //
-Route::post('/customer/profile',[CustomerAuthController::class,'customerprofile'])->middleware('auth:sanctum');
+Route::get('/customer/profile',[CustomerAuthController::class,'customerprofile'])->middleware('auth:sanctum');
 Route::resource('customers',CustomerController::class)->middleware('auth:sanctum');
 
 
@@ -68,6 +69,7 @@ Route::delete('user/destroy/{id}',[UserController::class,'destroy']);
 Route::resource('transactions',TransactionController::class)->middleware('auth:sanctum');
 Route::get('myTramsaction',[TransactionController::class,'myTransaction'])->middleware('auth:sanctum');
 Route::post('dotransaction',[TransactionController::class,'dotransaction'])->middleware('auth:sanctum');
+Route::post('convertMony',[TransactionController::class,'convertMony'])->middleware('auth:sanctum');
 //->middleware('auth:sanctum')
 Route::resource('withdraw',WithdrawController::class)->middleware('auth:sanctum');
 Route::post('withdrawHistory',[WithdrawController::class,'withdrawHistory'])->middleware('auth:sanctum');
@@ -80,11 +82,12 @@ Route::get('mydeposit',[DepositController::class,'mydeposit'])->middleware('auth
 
 
 Route::resource('accounts',AccountController::class)->middleware('auth:sanctum');
-Route::get('showmyaccunt/{id}',[AccountController::class,'showaccunt'])->middleware('auth:sanctum');
+Route::get('showmyaccunt',[AccountController::class,'showaccunt'])->middleware('auth:sanctum');
 Route::post('accounts/blockAccount',[AccountController::class,'blockAccount'])->middleware('auth:sanctum');
 Route::post('accounts/unblockAccount',[AccountController::class,'unblockAccount'])->middleware('auth:sanctum');
 
 Route::resource('branches',BranchController::class)->middleware('auth:sanctum');
+Route::get('allbranches',[BranchController::class,'getBranches']);
 
 
 //Route::controller(AuthController::class)->group(function (){
@@ -93,6 +96,7 @@ Route::resource('branches',BranchController::class)->middleware('auth:sanctum');
 
 Route::post('login',[AuthController::class,'login']);
 Route::post('logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
+Route::post('refreshToken',[AuthController::class,'refreshToken'])->middleware('auth:sanctum');
 Route::post('forgetPassword',[AuthController::class,'forgetPassword']);
 Route::post('resetPassword',[AuthController::class,'resetPassword']);
 
@@ -101,3 +105,5 @@ Route::post('ConvertMony',[CurrencyController::class,'convertMony']);
 
 Route::get('TransactionReport',[\App\Http\Controllers\TransactioReportController::class,'index'])->middleware(['auth:sanctum','isUser']);
 Route::get('reportCount',[\App\Http\Controllers\TransactioReportController::class,'reportCount']);
+
+Route::post('AddUser',[UserRoleController::class,'createUser']);

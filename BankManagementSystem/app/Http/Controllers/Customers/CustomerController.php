@@ -71,32 +71,53 @@ class CustomerController extends Controller
 //        $image=$request->file('photo')->getClientOriginalName();
 //
 //        $imageName=$request->file('photo')->storeAs('customer',$image,'images');
+
+
         $validator = Validator::make($request->all(),
             [
-                'firstName' => 'required|sometimes',
-                'lastName' => 'required|sometimes',
-                'ID_number'=>'required|digits_between:8,20|sometimes',
-                'address' => 'required|sometimes',
-                'email' => 'required|email|unique:users,email|sometimes',
-                'phone' => 'required|digits_between:8,15|sometimes',
-                'password' => 'required|min:8|sometimes',
+                'firstName' => 'nullable|sometimes',
+                'lastName' => 'nullable|sometimes',
+                'ID_number'=>'nullable|digits_between:8,20|sometimes',
+                'address' => 'nullable|sometimes',
+                'email' => 'nullable|email|sometimes',
+                'phone' => 'nullable|digits_between:8,15|sometimes',
+                'password' => 'nullable|min:8|sometimes',
             ]);
         if ($validator->fails()) {
             return $this->errorResponse(false, 'validation error', $validator->errors(), 401);
 
         }
-        $customer->update([
-            'firstName' => $request->input('firstName'),
-            'lastName' => $request->input('lastName'),
-            'ID_number'=>$request->input('ID_number'),
-            'gender' => $request->input('gender'),
+        $pasword=$request->password;
+
+        if ($pasword){
+
+            $customer->update([
+                'firstName' => $request->input('firstName'),
+                'lastName' => $request->input('lastName'),
+                'ID_number'=>$request->input('ID_number'),
+                'gender' => $request->input('gender'),
 //            'image'=>$imageName,
-            'address' => $request->input('address'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'password' => Hash::make($request->input('password'))
-        ]);
-        return $this->returndata(true,$customer,200);
+                'address' => $request->input('address'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+                'password' => Hash::make($request->input('password'))
+            ]);
+            return $this->returndata(true,$customer,200);
+        }
+        else{
+            $customer->update([
+                'firstName' => $request->input('firstName'),
+                'lastName' => $request->input('lastName'),
+                'ID_number'=>$request->input('ID_number'),
+                'gender' => $request->input('gender'),
+//            'image'=>$imageName,
+                'address' => $request->input('address'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+            ]);
+            return $this->returndata(true,$customer,200);
+        }
+
     }
 
     /**

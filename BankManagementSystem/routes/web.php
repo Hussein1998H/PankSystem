@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\mony;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,5 +26,11 @@ return $usd->id;
 });
 
 Route::get('testEmail',function (){
-   \Illuminate\Support\Facades\Mail::to('kaheralahzan89@gmail.com')->send(new \App\Mail\SendEmailFrom());
+    $user=\App\Models\User::findOrFail(18);
+
+//  Mail::to($user->email)->send(new \App\Mail\SendEmailFrom($customerFrom,
+//    $customerTo,
+//    $accountfrom,
+//    $accountto,
+//    $amount));
 });

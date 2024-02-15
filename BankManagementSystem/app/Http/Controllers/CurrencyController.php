@@ -10,7 +10,8 @@ class CurrencyController extends Controller
     public function index(){
 
 
-        $currencyapi = new CurrencyApiClient('cur_live_G8rj9dFObmcdf6rElJ9gtIzVjIDLSxbAnki5p03h');
+//        $currencyapi = new CurrencyApiClient('cur_live_G8rj9dFObmcdf6rElJ9gtIzVjIDLSxbAnki5p03h');
+        $currencyapi = new CurrencyApiClient('cur_live_sX0cEf48NHZKCCrqdeZPz2I2bXjePFCoR5DlrpEf');
         return response()->json($currencyapi->latest());
 //        currencies   latest
     }
@@ -20,7 +21,8 @@ class CurrencyController extends Controller
 
     public function convertMony(Request $request){
 
-        $currencyapi = new CurrencyApiClient('cur_live_G8rj9dFObmcdf6rElJ9gtIzVjIDLSxbAnki5p03h');
+//        $currencyapi = new CurrencyApiClient('cur_live_G8rj9dFObmcdf6rElJ9gtIzVjIDLSxbAnki5p03h');
+        $currencyapi = new CurrencyApiClient('cur_live_sX0cEf48NHZKCCrqdeZPz2I2bXjePFCoR5DlrpEf');
 
         $value=$request->value;
 

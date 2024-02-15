@@ -1,0 +1,127 @@
+table{
+    padding: 20px;
+    border-collapse: collapse;
+    width: 75%;
+    table-layout: fixed;
+    /*position: absolute;
+    top: 30%;
+    left: 40%;
+    transform: translate(-40%,-30%);
+    -webkit-transform: t;
+    -moz-transform: t;
+    -ms-transform: t;
+    -o-transform: t;
+    */transform: translate(12.5%,150px);
+}
+thead{
+    background-color: #11101D;
+}
+th{
+    color: #fff;
+    border: none;
+}
+tr:nth-child(even){
+    /* background-color: #ff6242; */
+    background-color: #D4D3E5;
+}
+td{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0.40rem;
+    font-weight: bold;
+}
+th , tr{
+    border: 1px solid #11101D;
+    padding: 0.75rem;
+    text-align: center;
+}
+/* .skeleton{
+    width: 80%;
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    transform: translate(-40%,-30%);
+    -webkit-transform: translate(-40%,-30%);
+    -moz-transform: translate(-40%,-30%);
+    -ms-transform: translate(-40%,-30%);
+    -o-transform: translate(-40%,-30%);
+} */
+@media(max-width:992px){
+    table{
+        width: 90%;
+        left: 37%;
+    }
+}
+form{
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    transform: translateX(-20%,-20%);
+    -webkit-transform: translateX(-20%,-20%);
+    -moz-transform: translateX(-20%,-20%);
+    -ms-transform: translateX(-20%,-20%);
+    -o-transform: translateX(-20%,-20%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* padding: 80px; */
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+.form-item{
+    display: grid;
+    grid-template-columns: repeat(3,33%);
+    gap: 20px;
+}
+.form-item input , .form-item select{
+    padding: 10px;
+    border: none;
+    outline: none;
+    box-shadow: 1px 1px 1px 1px #f00;
+    text-align: right;
+    font-size: 20px;
+}
+.form-item input::placeholder{
+    text-align: center;
+}
+.branch{
+    padding: 5px 0;
+    outline: none;
+    border: none;
+    box-shadow: 1px 1px 1px 1px #11101D;
+}
+.branch::placeholder{
+    text-align: center;
+}
+.branch-btn{
+    width: 150px;
+    padding: 5px 0;
+    font-size: 18px;
+    background-color: #f00;
+    color: #fff;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    cursor: pointer;
+}
+.branch-btn:hover{
+    color: #f00;
+    background-color: #fff;
+    border: 1px solid #f00;
+}
+.brnch-form{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 180px;
+    position: absolute;
+    top: 15%;
+    left: 15%;
+}

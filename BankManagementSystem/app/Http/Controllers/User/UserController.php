@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\Customer;
 use App\Models\User;
 use App\Traits\HTTP_ResponseTrait;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class UserController extends Controller
     }
     public function edit( $id)
     {
-        $user=User::find($id);
+        $user=User::with('branch')->find($id);
         return $this->returndata(true,$user,200);
 
     }
@@ -42,14 +43,14 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(),
             [
-                'firstName' => 'required',
-                'lastName' => 'required',
-                'ID_number'=>'required|digits_between:8,20',
-                'address' => 'required',
-                'email' => 'required|email|unique:users,email',
-                'phone' => 'required|digits_between:8,15',
-                'password' => 'required|min:8',
-                'role'=>'required',
+                'firstName' => 'nullable',
+                'lastName' => 'nullable',
+                'ID_number'=>'nullable|digits_between:8,20',
+                'address' => 'nullable',
+                'email' => 'nullable|email',
+                'phone' => 'nullable|digits_between:8,15',
+                'password' => 'nullable|min:8',
+                'role'=>'nullable',
             ]);
         if ($validator->fails()) {
             return $this->errorResponse(false, 'validation error', $validator->errors(), 401);
@@ -58,26 +59,47 @@ class UserController extends Controller
         $branch= Branch::where('address',$request->branchaddress)->first();
         $user=User::find($id);
 
-        $user->update([
-            'branch_id'=>$branch->id,
-            'firstName'=>$request->firstName,
-            'lastName'=>$request->lastName,
-            'ID_number'=>$request->ID_number,
-            'gender'=>$request->gender,
+        $pasword=$request->password;
+
+        if ($pasword){
+
+            $user->update([
+                'branch_id'=>$branch->id,
+                'firstName'=>$request->firstName,
+                'lastName'=>$request->lastName,
+                'ID_number'=>$request->ID_number,
+                'gender'=>$request->gender,
 //            'image'=>$imageName,
-            'address'=>$request->address,
-            'email'=>$request->email,
-            'phone'=>$request->phone,
-            'role'=>$request->role,
-            'password' => Hash::make($request->password)
-        ]);
-        return $this->returndata(true,$user,200);
+                'address'=>$request->address,
+                'email'=>$request->email,
+                'phone'=>$request->phone,
+                'role'=>$request->role,
+                'password' => Hash::make($request->password)
+            ]);
+            return $this->returndata(true,$user,200);
+        }
+        else{
+            $user->update([
+                'branch_id'=>$branch->id,
+                'firstName'=>$request->firstName,
+                'lastName'=>$request->lastName,
+                'ID_number'=>$request->ID_number,
+                'gender'=>$request->gender,
+//            'image'=>$imageName,
+                'address'=>$request->address,
+                'email'=>$request->email,
+                'phone'=>$request->phone,
+                'role'=>$request->role,
+            ]);
+            return $this->returndata(true,$user,200);
+        }
+
     }
 
 
     public function destroy($id)
     {
-        $user=User::find($id);
+        $user=Customer::find($id);
         $user->delete();
        // unlink(public_path('images'.'/'.$user->image));
 
